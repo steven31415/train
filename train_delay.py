@@ -8,7 +8,8 @@ import iso8601
 huxley = "https://huxley.apphb.com/"
 
 # Access token key
-key = "029ce3c3-91ed-492c-bca5-f9d95a6a848d"
+key = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
+#"029ce3c3-91ed-492c-bca5-f9d95a6a848d"
 
 # Load and store data for station names
 stationNameDataURL = "https://huxley.apphb.com/crs"
@@ -117,7 +118,7 @@ def getCurrentServicesBetween(startStationCode, endStationCode, maxJourneyTime):
 
 			# End station estimated time of arrival
 			to_eta = service["eta"]
-			if (to_eta == "On time"):
+			if (to_eta == "On time" or service["ata"] == "On time"):
 				to_eta = to_sta
 			elif (to_eta == "Delayed"):
 				to_eta == "Delayed"
@@ -242,7 +243,7 @@ def createSummary(inFile, outFile, summaryFile):
 			if (item["delay"] == 0):
 				continue
 
-			records = item["date"] + " \t"
+			records += item["date"] + " \t"
 
 			records += item["from_csr"].upper() + "(" + item["from_std"] + ")" + " -> " + item["to_csr"].upper()  + "(" + item["to_sta"] + ")" + "\t"
 
