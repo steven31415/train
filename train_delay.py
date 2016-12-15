@@ -101,6 +101,7 @@ def getCurrentServicesBetween(startStationCode, endStationCode, maxJourneyTime):
 			# Start station actual time of departure
 			# If not departed yet, actual time = None
 			from_atd = startStationCallingPoint["at"]
+
 			if (from_atd == "On time"):
 				from_atd = from_std
 			elif (from_atd == "Delayed"):
@@ -108,7 +109,7 @@ def getCurrentServicesBetween(startStationCode, endStationCode, maxJourneyTime):
 			elif (from_atd == "Cancelled"):
 				from_atd == "Cancelled"
 			elif (from_atd != None):
-				from_atd = datetime.strptime(startStationCallingPoint["at"], "%H:%M")
+				from_atd = datetime.strptime(from_atd, "%H:%M")
 			
 			# End station name
 			to_csr = service["crs"]
@@ -120,16 +121,16 @@ def getCurrentServicesBetween(startStationCode, endStationCode, maxJourneyTime):
 			to_eta = service["eta"]
 			to_ata = service["ata"]
 
-			if (to_eta == "On time" or service["ata"] == "On time"):
+			if (to_eta == "On time" or to_ata == "On time"):
 				to_eta = to_sta
-			elif (to_eta == "Delayed" or service["ata"] == "Delayed"):
+			elif (to_eta == "Delayed" or to_ata == "Delayed"):
 				to_eta == "Delayed"
-			elif (to_eta == "Cancelled" or service["ata"] == "Cancelled"):
+			elif (to_eta == "Cancelled" or to_ata == "Cancelled"):
 				to_eta == "Cancelled"
 			elif (to_eta != None):
-				to_eta = datetime.strptime(service["eta"], "%H:%M")
+				to_eta = datetime.strptime(to_eta, "%H:%M")
 			elif (to_ata != None):
-				to_eta = datetime.strptime(service["eta"], "%H:%M")
+				to_eta = datetime.strptime(to_ata, "%H:%M")
 
 			# Calculate stated date of departure
 			dt = iso8601.parse_date(service["generatedAt"])
