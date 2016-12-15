@@ -118,13 +118,17 @@ def getCurrentServicesBetween(startStationCode, endStationCode, maxJourneyTime):
 
 			# End station estimated time of arrival
 			to_eta = service["eta"]
+			to_ata = service["ata"]
+
 			if (to_eta == "On time" or service["ata"] == "On time"):
 				to_eta = to_sta
-			elif (to_eta == "Delayed"):
+			elif (to_eta == "Delayed" or service["ata"] == "Delayed"):
 				to_eta == "Delayed"
-			elif (to_eta == "Cancelled"):
+			elif (to_eta == "Cancelled" or service["ata"] == "Cancelled"):
 				to_eta == "Cancelled"
 			elif (to_eta != None):
+				to_eta = datetime.strptime(service["eta"], "%H:%M")
+			elif (to_ata != None):
 				to_eta = datetime.strptime(service["eta"], "%H:%M")
 
 			# Calculate stated date of departure
