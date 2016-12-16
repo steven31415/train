@@ -8,8 +8,8 @@ import iso8601
 huxley = "https://huxley.apphb.com/"
 
 # Access token key
-key = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
-#"029ce3c3-91ed-492c-bca5-f9d95a6a848d"
+# key = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
+key = "029ce3c3-91ed-492c-bca5-f9d95a6a848d"
 
 # Load and store data for station names
 stationNameDataURL = "https://huxley.apphb.com/crs"
@@ -248,16 +248,17 @@ def createSummary(inFile, outFile, summaryFile):
 	with open(outFile, "r") as f:
 		outData = json.load(f)
 
-	inHeading = "GOING IN:\n"
-	outHeading = "GOING OUT:\n"
+	inHeading = "\n####################\n###   GOING IN   ###\n####################\n"
+	outHeading = "\n####################\n###  GOING  OUT  ###\n####################\n"
 
 	def makeRecords(data):
 		records = ""
 		currentStation = ""
 
 		for item in data:
-			#if item["from_csr"] != currentStation:
-				#records += stationCodeToText(item["from_csr"]) + "\n"
+			if item["from_csr"] != currentStation:
+				records += "\n" + stationCodeToText(item["from_csr"]) + ":\n"
+				currentStation = item["from_csr"]
 
 			if (item["delay"] == 0):
 				continue
