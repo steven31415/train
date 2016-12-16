@@ -211,11 +211,21 @@ def updateData(file, routes):
 			if (not serviceExists):
 				data.append(service)
 
-			#if (len(data) > 10):
-			#	data.remove(data[0])
+		# Truncate data
+		truncatedData = []
 
+		maxDataItems = 100
+		startIndex = (len(data) - maxDataItems if len(data) - maxDataItems > 0 else 0)
+
+		for i in reversed(range(startIndex, len(data))):
+			truncatedData.insert(0, data[i])
+
+		# Sort data
+		truncatedData = sorted(truncatedData, key=lambda k: k["from_csr"])
+
+		# Write data
 		with open(file, "w") as f:
-			json.dump(data, f)
+			json.dump(truncatedData, f)
 
 def reverseRoutes(routes):
 	rr = []
@@ -243,8 +253,12 @@ def createSummary(inFile, outFile, summaryFile):
 
 	def makeRecords(data):
 		records = ""
+		currentStation = ""
 
 		for item in data:
+			#if item["from_csr"] != currentStation:
+				#records += stationCodeToText(item["from_csr"]) + "\n"
+
 			if (item["delay"] == 0):
 				continue
 
