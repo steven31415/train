@@ -8,7 +8,7 @@ import iso8601
 huxley = "https://huxley.apphb.com/"
 
 # Access token key
-# key = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
+#key = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
 key = "029ce3c3-91ed-492c-bca5-f9d95a6a848d"
 
 # Load and store data for station names
@@ -78,6 +78,9 @@ def getCurrentServicesBetween(startStationCode, endStationCode, maxJourneyTime):
 
 	# Get arrivals board for end station
 	arrivalsData = arrivalsRequest(endStationCode)
+
+	if (arrivalsData["trainServices"] == None):
+		return services
 
 	for arrival in arrivalsData["trainServices"]:
 		serviceID = arrival["serviceIdUrlSafe"]
@@ -221,6 +224,7 @@ def updateData(file, routes):
 			truncatedData.insert(0, data[i])
 
 		# Sort data
+		truncatedData = sorted(truncatedData, key=lambda k: k["to_csr"])
 		truncatedData = sorted(truncatedData, key=lambda k: k["from_csr"])
 
 		# Write data
@@ -254,16 +258,15 @@ def createSummary(inFile, outFile, summaryFile):
 	def makeRecords(data):
 		records = ""
 		currentStation = ""
+		currentDate = ""
 
 		for item in data:
 			if item["from_csr"] != currentStation:
-				records += "\n" + stationCodeToText(item["from_csr"]) + ":\n"
+				records += "\n" + "ORIGIN: " + stationCodeToText(item["from_csr"]) + "\n"
 				currentStation = item["from_csr"]
 
 			if (item["delay"] == 0):
 				continue
-
-			records += item["date"] + " \t"
 
 			records += item["from_csr"].upper() + "(" + item["from_std"] + ")" + " -> " + item["to_csr"].upper()  + "(" + item["to_sta"] + ")" + "\t"
 
